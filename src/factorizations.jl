@@ -1,4 +1,5 @@
-using MatrixAlgebraKit: qr_full, qr_compact, svd_full, svd_compact, svd_trunc
+using MatrixAlgebraKit:
+  MatrixAlgebraKit, qr_full, qr_compact, svd_full, svd_compact, svd_trunc
 # TODO: consider in-place version
 # TODO: figure out kwargs and document
 #
@@ -36,11 +37,11 @@ Compute the SVD decomposition of a generic N-dimensional array, by interpreting 
 a linear map from the domain to the codomain indices. These can be specified either via
 their labels, or directly through a `biperm`.
 """
-function svd(A::AbstractArray, labels_a, labels_codomain, labels_domain; kwargs...)
+function svd(A::AbstractArray, labels_A, labels_codomain, labels_domain; kwargs...)
   biperm = blockedperm_indexin(Tuple.((labels_A, labels_codomain, labels_domain))...)
   return svd(A, biperm; kwargs...)
 end
-function svd(a::AbstractArray, biperm::BlockedPermutation{2}; full::Bool=false, kwargs...)
+function svd(A::AbstractArray, biperm::BlockedPermutation{2}; full::Bool=false, kwargs...)
   # tensor to matrix
   A_mat = fusedims(A, biperm)
 
@@ -67,7 +68,7 @@ function tsvd(A::AbstractArray, labels_A, labels_codomain, labels_domain; kwargs
   biperm = blockedperm_indexin(Tuple.((labels_A, labels_codomain, labels_domain))...)
   return tsvd(A, biperm; kwargs...)
 end
-function tsvd(a::AbstractArray, biperm::BlockedPermutation{2}; kwargs...)
+function tsvd(A::AbstractArray, biperm::BlockedPermutation{2}; kwargs...)
   # tensor to matrix
   A_mat = fusedims(A, biperm)
 
