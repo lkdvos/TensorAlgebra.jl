@@ -14,7 +14,6 @@ include("contract/blockedperms.jl")
 include("contract/allocate_output.jl")
 include("contract/contract_matricize/contract.jl")
 
-include("factorizations/svd.jl")
-include("factorizations/qr.jl")
+include("factorizations.jl")
 
 end
