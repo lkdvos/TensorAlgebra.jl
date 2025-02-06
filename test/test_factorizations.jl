@@ -1,6 +1,6 @@
 using Test: @test, @testset, @inferred
 using TestExtras: @constinferred
-using TensorAlgebra: contract, svd, tsvd, TensorAlgebra
+using TensorAlgebra: contract, svd, TensorAlgebra
 using TensorAlgebra.MatrixAlgebraKit: truncrank
 using LinearAlgebra: norm
 
@@ -52,7 +52,7 @@ end
   _, S_untrunc, _ = svd(A, labels_A, labels_U, labels_Vᴴ)
 
   trunc = truncrank(size(S_untrunc, 1) - 1)
-  U, S, Vᴴ = @constinferred tsvd(A, labels_A, labels_U, labels_Vᴴ; trunc)
+  U, S, Vᴴ = @constinferred svd(A, labels_A, labels_U, labels_Vᴴ; trunc)
 
   @test A == Acopy # should not have altered initial array
   US, labels_US = contract(U, (labels_U..., :u), S, (:u, :v))
