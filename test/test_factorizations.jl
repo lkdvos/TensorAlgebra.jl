@@ -2,13 +2,11 @@ using Test: @test, @testset, @inferred
 using TestExtras: @constinferred
 using TensorAlgebra: contract, svd, TensorAlgebra
 using TensorAlgebra.MatrixAlgebraKit: truncrank
-using LinearAlgebra: norm
 
 elts = (Float64, ComplexF64)
 
 @testset "Full SVD ($T)" for T in elts
   A = randn(T, 5, 4, 3, 2)
-  A ./= norm(A)
   labels_A = (:a, :b, :c, :d)
   labels_U = (:b, :a)
   labels_Vᴴ = (:d, :c)
@@ -25,7 +23,6 @@ end
 
 @testset "Compact SVD ($T)" for T in elts
   A = randn(T, 5, 4, 3, 2)
-  A ./= norm(A)
   labels_A = (:a, :b, :c, :d)
   labels_U = (:b, :a)
   labels_Vᴴ = (:d, :c)
@@ -42,7 +39,6 @@ end
 
 @testset "Truncated SVD ($T)" for T in elts
   A = randn(T, 5, 4, 3, 2)
-  A ./= norm(A)
   labels_A = (:a, :b, :c, :d)
   labels_U = (:b, :a)
   labels_Vᴴ = (:d, :c)
