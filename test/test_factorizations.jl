@@ -1,10 +1,42 @@
 using Test: @test, @testset, @inferred
 using TestExtras: @constinferred
-using TensorAlgebra: contract, svd, TensorAlgebra
+using TensorAlgebra: contract, qr, svd, TensorAlgebra
 using TensorAlgebra.MatrixAlgebraKit: truncrank
 
 elts = (Float64, ComplexF64)
 
+# QR Decomposition
+# ----------------
+@testset "Full QR ($T)" for T in elts
+  A = randn(T, 5, 4, 3, 2)
+  labels_A = (:a, :b, :c, :d)
+  labels_Q = (:b, :a)
+  labels_R = (:d, :c)
+
+  Acopy = deepcopy(A)
+  Q, R = @constinferred qr(A, labels_A, labels_Q, labels_R; full=true)
+  @test A == Acopy # should not have altered initial array
+  A′ = contract(labels_A, Q, (labels_Q..., :q), R, (:q, labels_R...))
+  @test A ≈ A′
+  @test size(Q, 1) * size(Q, 2) == size(Q, 3) # Q is unitary
+end
+
+@testset "Compact QR ($T)" for T in elts
+  A = randn(T, 2, 3, 4, 5) # compact only makes a difference for less columns
+  labels_A = (:a, :b, :c, :d)
+  labels_Q = (:b, :a)
+  labels_R = (:d, :c)
+
+  Acopy = deepcopy(A)
+  Q, R = @constinferred qr(A, labels_A, labels_Q, labels_R; full=false)
+  @test A == Acopy # should not have altered initial array
+  A′ = contract(labels_A, Q, (labels_Q..., :q), R, (:q, labels_R...))
+  @test A ≈ A′
+  @test size(Q, 3) == min(size(A, 1) * size(A, 2), size(A, 3) * size(A, 4))
+end
+
+# Singular Value Decomposition
+# ----------------------------
 @testset "Full SVD ($T)" for T in elts
   A = randn(T, 5, 4, 3, 2)
   labels_A = (:a, :b, :c, :d)
@@ -56,3 +88,4 @@ end
   @test norm(A - A′) ≈ S_untrunc[end]
   @test size(S, 1) == size(S_untrunc, 1) - 1
 end
+

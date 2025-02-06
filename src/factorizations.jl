@@ -4,8 +4,8 @@ using MatrixAlgebraKit: qr_full, qr_compact, svd_full, svd_compact, svd_trunc
 # TODO: figure out kwargs and document
 #
 """
-    qr(A::AbstractArray, labels_A, labels_codomain, labels_domain; full=true, kwargs...)
-    qr(A::AbstractArray, biperm::BlockedPermutation{2}; full=true, kwargs...)
+    qr(A::AbstractArray, labels_A, labels_codomain, labels_domain; full=true, kwargs...) -> Q, R
+    qr(A::AbstractArray, biperm::BlockedPermutation{2}; full=true, kwargs...) -> Q, R
 
 Compute the QR decomposition of a generic N-dimensional array, by interpreting it as
 a linear map from the domain to the codomain indices. These can be specified either via
